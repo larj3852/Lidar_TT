@@ -71,7 +71,7 @@ def txt2array(file_path=None):
         for linea in a.split("\n"):
             line = linea.split("\t")
             try:
-                lista.append([float(line[0]),float(line[1]),float(line[2])])
+                lista.append([int(line[0]),int(line[1]),int(line[2])])
             except ValueError:
                 continue
 
