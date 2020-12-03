@@ -86,7 +86,7 @@ class Scaner3D:
             
 
             #   Muestras por escaneo
-            #informacion.info(f"Ang={self.a[j]} |Muestras = {len(scan)}")
+            informacion.info(f"Ang={self.a[j]} |Muestras = {len(scan)}")
 
             #   Pre-procesamiento de los datos
             scan = self.recorte(scan)  #Selecciona solo los puntos frontales
@@ -143,9 +143,12 @@ class Scaner3D:
         ax.set_xlabel("x")
         ax.set_ylabel("y")
         ax.set_zlabel("z")
-        #ax.set_xlim(-300,300)
-        #ax.set_ylim(-300,300)
-        ax.set_zlim(-200,200)
+        ax.set_xlim(-50,50)
+        ax.set_ylim(-1,100)
+        ax.set_zlim(-50,50)
+        #ax.set_xlim(np.min(self.data[0,:]),np.max(self.data[0,:]))
+        #ax.set_ylim(np.min(self.data[1,:]),np.max(self.data[1,:]))
+        #ax.set_zlim(np.min(self.data[2,:]),np.max(self.data[2,:]))
         ax.grid(True)
 
         #   Scaneo de los datos
