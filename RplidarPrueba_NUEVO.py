@@ -46,7 +46,7 @@ ax.scatter(0, 0, 0, marker='o');
 ax.set_xlabel("x")
 ax.set_ylabel("y")
 ax.set_zlabel("z")
-ax.set_ylim(-1,300)
+#ax.set_ylim(-1,300)
 ax.grid(True)
 process_scan = lambda scan: None
 #Angulos en Z

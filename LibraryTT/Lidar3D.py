@@ -37,7 +37,7 @@ class Scaner3D:
         self.process_scan = lambda scan: None   #Lectura de generadores
 
 
-    def Scanear(self, Angulo_Init=60,Angulo_Fin=50,paso=-1, plotear=False):
+    def Scanear(self, Angulo_Init=80,Angulo_Fin=120,paso=1, plotear=False):
         """
         Función para escanear los puntos en el espacio
         Parametros
@@ -62,7 +62,7 @@ class Scaner3D:
         #Generacion de angulos de escaneo en el plano xz (del servo pues)
         self.Angulo_Init = Angulo_Init #90
         self.Angulo_Fin  = Angulo_Fin  #70
-        self.paso = -1*np.abs(paso)
+        self.paso = np.abs(paso)
         self.a=np.arange(self.Angulo_Init,self.Angulo_Fin,self.paso)
         self.phi=self.a*np.pi/180 #90 a 60        #Array de angulos
         
@@ -81,7 +81,7 @@ class Scaner3D:
                 self.process_scan(scan2)
                 i+=1
                 scan= scan2 + scan
-                if i>= 2:
+                if i>= 1:
                     break
             
 
@@ -92,10 +92,11 @@ class Scaner3D:
             scan = self.recorte(scan)  #Selecciona solo los puntos frontales
             scan=np.array(scan)
             #Resolucion cm
-            self.x = np.round(np.cos(np.pi - scan[:,1] *(np.pi/180))*scan[:,2]/10) #np.round(vec,decimals=0) 
-            self.y = np.round(np.sin(np.pi-scan[:,1]*(np.pi/180))*np.sin(self.phi[j])*scan[:,2]/10)
+            self.x = -np.round(np.cos(np.pi - scan[:,1] *(np.pi/180))*scan[:,2]/10) #np.round(vec,decimals=0) 
+            self.y = -np.round(np.sin(np.pi-scan[:,1]*(np.pi/180))*np.sin(self.phi[j])*scan[:,2]/10)
             #Nota, como el lidar está en 90° se le inverte la función sin(phi)
-            self.z = np.round(np.sin(np.pi- scan[:,1]*(np.pi/180))*np.cos(self.phi[j])*scan[:,2]/10)
+            cte = 10/180*np.pi #compenza el desface producido por los engranes
+            self.z = -np.round(np.sin(np.pi- scan[:,1]*(np.pi/180))*np.cos(self.phi[j]-cte)*scan[:,2]/10)
 
             T_LMS +=len(scan)
             #   Empaqueta los datos en vector cartesiano [x,y,z]
@@ -143,9 +144,9 @@ class Scaner3D:
         ax.set_xlabel("x")
         ax.set_ylabel("y")
         ax.set_zlabel("z")
-        ax.set_xlim(-50,50)
-        ax.set_ylim(-1,100)
-        ax.set_zlim(-50,50)
+        #ax.set_xlim(-200,200)
+        #ax.set_ylim(-200,10)
+        ax.set_zlim(-100,150)
         #ax.set_xlim(np.min(self.data[0,:]),np.max(self.data[0,:]))
         #ax.set_ylim(np.min(self.data[1,:]),np.max(self.data[1,:]))
         #ax.set_zlim(np.min(self.data[2,:]),np.max(self.data[2,:]))
@@ -162,7 +163,7 @@ class Scaner3D:
         """
         lista = []
         for a in scan:
-            if a[1]<150:
+            if (a[1]>150):
                 lista.append(a)
         return lista
 
