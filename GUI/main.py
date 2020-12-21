@@ -1,6 +1,6 @@
 from PyQt5.QtWidgets import (QApplication, QMessageBox, QMainWindow, QVBoxLayout, QAction, QFileDialog, QDialog, QLabel)
 from PyQt5.QtCore import *
-from PyQt5.QtGui import QIcon, QPixmap
+from PyQt5.QtGui import QIcon, QPixmap, QPainter,  QBrush, QPen, QColor
 from PyQt5.uic import loadUiType
 from os.path import dirname, realpath, join
 from sys import argv
@@ -41,31 +41,52 @@ class Main(QMainWindow, FROM_MAIN):
         try:
             with open(image):
                 self.persona = QLabel(parent=self.retroalimentacion)
+                self.persona.setStyleSheet("*{background-color:transparent;}")
                 pixmap = QPixmap(image)
                 self.persona.setPixmap(pixmap)
                 self.persona.setScaledContents(True)
                 #self.persona.move(180,100)
-                self.persona.setGeometry(170,50,120,70)
+                self.persona.setGeometry(170,60,120,70)
         except FileNotFoundError:
             print("Image Not Found")
 
+        #Retroalimentacion
+        self.circuito = []
+        self.dibujar = []
+        self.Motor_color = [Qt.yellow,Qt.red,Qt.green,Qt.red,Qt.yellow]
+        Motor_Pos  = [[60,65],[120,20],[205,3],[290,20],[345,65]]
+        Motor_Size = [[1,1,45,45],[1,1,45,45],[1,1,45,45],[1,1,45,45],[1,1,45,45]] #X,Y,ANCHO,ALTO
+        #Motor1
+        for i in range(5):
+            self.circuito.append(QLabel(parent=self.retroalimentacion))
+            self.circuito[i].move(Motor_Pos[i][0],Motor_Pos[i][1])
+            self.circuito[i].setStyleSheet("*{background-color:transparent;}")
+            canvas = QPixmap(50,50)
+            canvas.fill(Qt.transparent)
+            self.circuito[i].setPixmap(canvas)
+            self.dibujar.append(QPainter(self.circuito[i].pixmap()))
+            self.dibujar[i].setPen(QPen(self.Motor_color[i],2,Qt.SolidLine))   
+            self.dibujar[i].setBrush(QBrush(self.Motor_color[i],Qt.SolidPattern)) 
+            self.dibujar[i].drawEllipse(Motor_Size[i][0],Motor_Size[i][1],Motor_Size[i][2],Motor_Size[i][3])
+            self.dibujar[i].end()
 
     def Plot3D(self):
         global filename
         
         # options = QFileDialog.Options()
         # options |= QFileDialog.DontUseNativeDialog
-        filename, _ = QFileDialog.getOpenFileName(self, "Open", "", "Text Files (*.txt);;All Files (*)")
-        #if filename:
-        #    self.listWidget.clear()
-        #   self.listWidget.addItem(filename)        
         
+        filename, _ = QFileDialog.getOpenFileName(self, "Open", "", "Text Files (*.txt);;All Files (*)")
+        if not(filename):
+            return          #Si no se selecciona ningun archivo, nada.
+
         with open(filename) as f:
 
             array = []
             for line in f:  # read rest of lines
                 array.append([float(x) for x in line.split()])
         n = len(array)
+
         try:
             if n < 4:
                 QMessageBox.warning(self, 'Error!', "Number  of points < 4 !")

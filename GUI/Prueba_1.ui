@@ -26,6 +26,12 @@
    <bool>true</bool>
   </property>
   <widget class="QWidget" name="centralwidget">
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+     <horstretch>90</horstretch>
+     <verstretch>60</verstretch>
+    </sizepolicy>
+   </property>
    <widget class="QWidget" name="Pantalla_Central" native="true">
     <property name="enabled">
      <bool>true</bool>
@@ -38,10 +44,35 @@
       <height>600</height>
      </rect>
     </property>
+    <property name="sizePolicy">
+     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+      <horstretch>90</horstretch>
+      <verstretch>60</verstretch>
+     </sizepolicy>
+    </property>
+    <property name="minimumSize">
+     <size>
+      <width>900</width>
+      <height>0</height>
+     </size>
+    </property>
+    <property name="sizeIncrement">
+     <size>
+      <width>0</width>
+      <height>0</height>
+     </size>
+    </property>
+    <property name="contextMenuPolicy">
+     <enum>Qt::NoContextMenu</enum>
+    </property>
     <property name="styleSheet">
      <string notr="true">*{
 	font-family: 'Arial';	
 	background-color :#ddd;
+}
+#retroalimentacion{
+	background-color:#3C5366;
+	
 }
 
 #corrida_1,
@@ -61,6 +92,12 @@
 	background-color:#330033;
 	font-size:16px;
 	border-radius:10px;
+}
+
+#corrida_1:pressed,#corrida_N:pressed,
+ #reconstruir:pressed, #detectar:pressed {
+	background-color:#FFFFFF;
+	color:black;
 }
 
 #corrida_N {
@@ -154,6 +191,9 @@ QLabel{
        <width>440</width>
        <height>140</height>
       </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true"/>
      </property>
      <property name="frameShape">
       <enum>QFrame::StyledPanel</enum>
@@ -263,7 +303,7 @@ QLabel{
      <property name="geometry">
       <rect>
        <x>170</x>
-       <y>500</y>
+       <y>490</y>
        <width>151</width>
        <height>25</height>
       </rect>
