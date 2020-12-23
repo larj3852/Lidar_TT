@@ -8,3 +8,6 @@ scan = Lidar.Scaner3D()
 a = scan.Scanear(Angulo_Init=130,Angulo_Fin=30,paso=-2,plotear=True)
 del(scan.lidar)
 del(scan)
+
+#%%
+# %%
