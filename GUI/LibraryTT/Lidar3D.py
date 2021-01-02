@@ -1,11 +1,11 @@
 import rplidar
+import csv
 from time import sleep,time
 import numpy as np
 import matplotlib.pyplot as plt
 from   LibraryTT.Servo import  Servo
 import LibraryTT.txt2array as txt2array
 import logging
-from os.path import exists
 
 class Scaner3D:
     """
@@ -21,23 +21,19 @@ class Scaner3D:
         ----------
         Ninguno
         """
-        
+        self.PuertoUSB = '/dev/ttyUSB0'
         #Inicializacion Servo en  inicial
         self.servo = Servo(90)
         
-        #Inicializacion Lidar (en puerto ttyUSB0 o ttyUSB1)
-        if exists("/dev/ttyUSB0"):
-            self.lidar = rplidar.RPLidar("/dev/ttyUSB0")
-        else:
-            self.lidar = rplidar.RPLidar("/dev/ttyUSB1")
-            
+        #Inicializacion Lidar
+        self.lidar = rplidar.RPLidar(self.PuertoUSB)
         sleep(1)
         self.lidar.get_info()        #Informacion del Lidar
         self.lidar.get_health()      #Informacion del estado del Lidar
         self.process_scan = lambda scan: None   #Lectura de generadores
 
 
-    def Scanear(self, Angulo_Init=80,Angulo_Fin=120,paso=1, plotear=False):
+    def Scanear(self, Angulo_Init=60,Angulo_Fin=50,paso=-1, plotear=False):
         """
         Función para escanear los puntos en el espacio
         Parametros
@@ -62,7 +58,7 @@ class Scaner3D:
         #Generacion de angulos de escaneo en el plano xz (del servo pues)
         self.Angulo_Init = Angulo_Init #90
         self.Angulo_Fin  = Angulo_Fin  #70
-        self.paso = np.abs(paso)
+        self.paso = -1*np.abs(paso)
         self.a=np.arange(self.Angulo_Init,self.Angulo_Fin,self.paso)
         self.phi=self.a*np.pi/180 #90 a 60        #Array de angulos
         
@@ -76,28 +72,23 @@ class Scaner3D:
             self.lidar.connect()
             self.lidar._serial_port.flushInput()
             i=0
-            scan=[]
-            for scan2 in self.lidar.iter_scans():
-                self.process_scan(scan2)
+            for scan in self.lidar.iter_scans():
+                self.process_scan(scan)
                 i+=1
-                scan= scan2 + scan
-                if i>= 1:
+                if i>= 3:
                     break
-            
 
             #   Muestras por escaneo
             informacion.info(f"Ang={self.a[j]} |Muestras = {len(scan)}")
-
+                             
             #   Pre-procesamiento de los datos
             scan = self.recorte(scan)  #Selecciona solo los puntos frontales
             scan=np.array(scan)
-            #Resolucion cm
-            self.x = -np.round(np.cos(np.pi - scan[:,1] *(np.pi/180))*scan[:,2]/10) #np.round(vec,decimals=0) 
-            self.y = -np.round(np.sin(np.pi-scan[:,1]*(np.pi/180))*np.sin(self.phi[j])*scan[:,2]/10)
+            self.x = np.round(np.cos(np.pi - scan[:,1] *(np.pi/180))*scan[:,2]/10,decimals=3)
+            self.y = np.round(np.sin(np.pi-scan[:,1]*(np.pi/180))*np.sin(self.phi[j])*scan[:,2]/10,decimals=3)
             #Nota, como el lidar está en 90° se le inverte la función sin(phi)
-            cte = 10/180*np.pi #compenza el desface producido por los engranes
-            self.z = -np.round(np.sin(np.pi- scan[:,1]*(np.pi/180))*np.cos(self.phi[j]-cte)*scan[:,2]/10)
-
+            self.z = np.round(np.sin(np.pi- scan[:,1]*(np.pi/180))*np.cos(self.phi[j])*scan[:,2]/10,decimals=3)
+            
             T_LMS +=len(scan)
             #   Empaqueta los datos en vector cartesiano [x,y,z]
             self.data = self.__empaquetamiento_cartesinano()
@@ -114,15 +105,15 @@ class Scaner3D:
         
         #Retornar servo a estado inicial
         self.servo.setAngle(90)
-        self.data=self.data.astype(int)       
-        #Guardar datos
-        txt2array.array2txt(self.data)
-        txt2array.array2csv(self.data)
         
         #¿Plotear?
         if plotear:
             self.ploteo3D()
-            
+        
+        #Guardar datos
+        txt2array.array2txt(self.data)
+        txt2array.array2csv(self.data)
+                
         #Regresa los puntos escaneados
         return self.data.T
 
@@ -144,12 +135,7 @@ class Scaner3D:
         ax.set_xlabel("x")
         ax.set_ylabel("y")
         ax.set_zlabel("z")
-        #ax.set_xlim(-200,200)
-        #ax.set_ylim(-200,10)
-        ax.set_zlim(-100,150)
-        #ax.set_xlim(np.min(self.data[0,:]),np.max(self.data[0,:]))
-        #ax.set_ylim(np.min(self.data[1,:]),np.max(self.data[1,:]))
-        #ax.set_zlim(np.min(self.data[2,:]),np.max(self.data[2,:]))
+        ax.set_ylim(-1,300)
         ax.grid(True)
 
         #   Scaneo de los datos
@@ -163,7 +149,7 @@ class Scaner3D:
         """
         lista = []
         for a in scan:
-            if (a[1]>150):
+            if a[1]<150:
                 lista.append(a)
         return lista
 
@@ -176,3 +162,4 @@ class Scaner3D:
         aux  = np.concatenate(([self.x],[self.y],[self.z]),axis=0) #Concatena a = x,y,z en filas
         aux = np.concatenate((self.data,aux),axis=1) #Concatena concatena planos en columnas
         return aux
+    

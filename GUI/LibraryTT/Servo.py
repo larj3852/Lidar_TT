@@ -32,10 +32,9 @@ class Servo:
             pwm=GPIO.PWM(12,50)
             pwm.start(0)
             duty = angle/ 18 + 2.2
-            #print(f"ciclo: {duty}")
             GPIO.output(12, True)
             pwm.ChangeDutyCycle(duty)
-            sleep(0.1) #Si la diferencia entre angulos es muy grade, no llegará
+            sleep(0.3) #Si la diferencia entre angulos es muy grade, no llegará
             GPIO.output(12, False)
             pwm.ChangeDutyCycle(duty)
             pwm.stop()

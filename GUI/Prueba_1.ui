@@ -1,0 +1,364 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>900</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Prototipo de Identificacion de  Objetos</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true"/>
+  </property>
+  <property name="iconSize">
+   <size>
+    <width>30</width>
+    <height>30</height>
+   </size>
+  </property>
+  <property name="animated">
+   <bool>true</bool>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+     <horstretch>90</horstretch>
+     <verstretch>60</verstretch>
+    </sizepolicy>
+   </property>
+   <widget class="QWidget" name="Pantalla_Central" native="true">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>900</width>
+      <height>600</height>
+     </rect>
+    </property>
+    <property name="sizePolicy">
+     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+      <horstretch>90</horstretch>
+      <verstretch>60</verstretch>
+     </sizepolicy>
+    </property>
+    <property name="minimumSize">
+     <size>
+      <width>900</width>
+      <height>0</height>
+     </size>
+    </property>
+    <property name="sizeIncrement">
+     <size>
+      <width>0</width>
+      <height>0</height>
+     </size>
+    </property>
+    <property name="contextMenuPolicy">
+     <enum>Qt::NoContextMenu</enum>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">*{
+	font-family: 'Arial';	
+	background-color :#ddd;
+}
+#retroalimentacion{
+	background-color:#3C5366;
+	
+}
+
+#corrida_1,
+#corrida_N,
+#reconstruir,
+#Boton_Detectar{
+	background-color: #9e007f;
+	border-radius: 5px;
+	font-size: 15px;
+	text-align: center;
+	padding-left:10px;
+	color:white;
+}
+
+#corrida_1:hover,#corrida_N:hover,
+ #reconstruir:hover, #Boton_Detectar:hover {
+	background-color:#330033;
+	font-size:16px;
+	border-radius:10px;
+}
+
+#corrida_1:pressed,#corrida_N:pressed,
+ #reconstruir:pressed, #Boton_Detectar:pressed {
+	background-color:#FFFFFF;
+	color:black;
+}
+
+#corrida_N {
+	height: 100px;
+	background-color: #520375;
+	color: white;
+	transition: all 300ms;
+	}
+
+#reconstruir,
+#Boton_Detectar{
+	color: white;
+	font-size:13;
+	background-color: #0a3194;
+	border-radius: 10px;
+}
+
+#configuraciones{
+	color: #555;
+	font-size:15;
+	background-color: #f2bf00;
+	border-radius: 10px;
+}
+
+QLabel{
+	font-size:18px;
+	font-family: Helvetica;
+	font-weight: bold;
+	color: #666;
+}
+#Label_Algoritmo {
+	font-size:9px;
+}
+</string>
+    </property>
+    <widget class="QPushButton" name="corrida_1">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>400</y>
+       <width>150</width>
+       <height>40</height>
+      </rect>
+     </property>
+     <property name="mouseTracking">
+      <bool>false</bool>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">pushButton{
+	color: rgb(239, 41, 41);
+}</string>
+     </property>
+     <property name="text">
+      <string>Prueba Unitaria</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="corrida_N">
+     <property name="geometry">
+      <rect>
+       <x>170</x>
+       <y>400</y>
+       <width>150</width>
+       <height>40</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Prueba Continua</string>
+     </property>
+    </widget>
+    <widget class="QFrame" name="deteccion">
+     <property name="geometry">
+      <rect>
+       <x>450</x>
+       <y>30</y>
+       <width>440</width>
+       <height>350</height>
+      </rect>
+     </property>
+     <property name="frameShape">
+      <enum>QFrame::StyledPanel</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
+     </property>
+    </widget>
+    <widget class="QFrame" name="retroalimentacion">
+     <property name="geometry">
+      <rect>
+       <x>450</x>
+       <y>420</y>
+       <width>440</width>
+       <height>140</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true"/>
+     </property>
+     <property name="frameShape">
+      <enum>QFrame::StyledPanel</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
+     </property>
+    </widget>
+    <widget class="QFrame" name="reconstrucion">
+     <property name="geometry">
+      <rect>
+       <x>5</x>
+       <y>30</y>
+       <width>440</width>
+       <height>350</height>
+      </rect>
+     </property>
+     <property name="cursor">
+      <cursorShape>OpenHandCursor</cursorShape>
+     </property>
+     <property name="frameShape">
+      <enum>QFrame::StyledPanel</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="reconstruir">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>450</y>
+       <width>150</width>
+       <height>30</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Reconstruir</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="Boton_Detectar">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>490</y>
+       <width>150</width>
+       <height>30</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Detectar</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="configuraciones">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>530</y>
+       <width>150</width>
+       <height>30</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Configuracion</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="Label_Reconstruccion">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>2</y>
+       <width>150</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Reconstruccion</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="Label_Deteccion">
+     <property name="geometry">
+      <rect>
+       <x>450</x>
+       <y>3</y>
+       <width>150</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Deteccion</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="Label_Retroalimentacion">
+     <property name="geometry">
+      <rect>
+       <x>450</x>
+       <y>390</y>
+       <width>181</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Retroalimentacion</string>
+     </property>
+    </widget>
+    <widget class="QComboBox" name="Lista_Algoritmos">
+     <property name="geometry">
+      <rect>
+       <x>170</x>
+       <y>490</y>
+       <width>151</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="editable">
+      <bool>false</bool>
+     </property>
+     <property name="insertPolicy">
+      <enum>QComboBox::InsertAtTop</enum>
+     </property>
+     <property name="sizeAdjustPolicy">
+      <enum>QComboBox::AdjustToContentsOnFirstShow</enum>
+     </property>
+    </widget>
+    <widget class="QLabel" name="Label_Algoritmo">
+     <property name="geometry">
+      <rect>
+       <x>170</x>
+       <y>460</y>
+       <width>200</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Seleccione Algoritmo de deteccion</string>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QWidget" name="Pantalla_Presentacion" native="true">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>800</width>
+      <height>600</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">*{
+	background-color: #ddd;
+}</string>
+    </property>
+   </widget>
+   <zorder>Pantalla_Presentacion</zorder>
+   <zorder>Pantalla_Central</zorder>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+ </widget>
+ <tabstops>
+  <tabstop>corrida_1</tabstop>
+  <tabstop>corrida_N</tabstop>
+  <tabstop>reconstruir</tabstop>
+  <tabstop>Boton_Detectar</tabstop>
+  <tabstop>configuraciones</tabstop>
+ </tabstops>
+ <resources/>
+ <connections/>
+</ui>
