@@ -107,24 +107,43 @@ class Main(QMainWindow, FROM_MAIN):
     def Detectar(self):
         if self.dataSet is None:
             return
-        
+        #Metodo K-MEANS
         if self.Lista_Algoritmos.currentText()=="K-Means":
-            k = 5
             
+            #Inicio de la deteccion
             self.Label_Deteccion.setStyleSheet("*{color:red;}")
             self.Label_Deteccion.setText("Detectando...")
             self.Label_Deteccion.repaint()
-            
-            TN,chch = conversion.kk(self.dataSet,k)
 
+            k = 5
+            TN,chch = conversion.kk(self.dataSet,k)
+            #Fin de la deteccion
             self.Label_Deteccion.setText("Deteccion")
             self.Label_Deteccion.setStyleSheet("*{color:#555;}")
             try:
                 self.sc2.ImprimirOBjetos(self.dataSet,TN,chch,1,0)
             except:
                 QMessageBox.critical(self, 'Erorre', "   Erore Plot")
-        
+            return
+        #Metodo DBSCAN
+        if self.Lista_Algoritmos.currentText()=="DBSCAN":
+            #Inicio de la deteccion
+            self.Label_Deteccion.setStyleSheet("*{color:red;}")
+            self.Label_Deteccion.setText("Detectando...")
+            self.Label_Deteccion.repaint()
 
+            Epsilon = 40 #35 #30
+            MinPts =  20 #40 #75 #78
+            chch = conversion.RObjetos(self.dataSet,Epsilon,MinPts)
+            TN = conversion.usar(chch)
+            #Fin de la deteccion
+            self.Label_Deteccion.setText("Deteccion")
+            self.Label_Deteccion.setStyleSheet("*{color:#555;}")
+            try:
+                self.sc2.ImprimirOBjetos(self.dataSet,TN,chch,1,0)
+            except:
+                QMessageBox.critical(self, 'Erorre', "   Erore Plot")
+            return
 
 
     def Configuracion(self):
