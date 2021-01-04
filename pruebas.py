@@ -5,7 +5,7 @@ import LibraryTT.Lidar3D as Lidar
 from time import sleep
 
 scan = Lidar.Scaner3D()
-a = scan.Scanear(Angulo_Init=30,Angulo_Fin=140,paso=2,plotear=True)
+a = scan.Scanear(Angulo_Init=30,Angulo_Fin=150,paso=5,plotear=True)
 sleep(2)
 # a = scan.Scanear(Angulo_Init=130,Angulo_Fin=30,paso=-2,plotear=True)
 # sleep(2)
