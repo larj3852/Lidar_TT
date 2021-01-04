@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import (QApplication, QMessageBox, QMainWindow, QVBoxLayout, QAction, QFileDialog, QDialog, QLabel)
+from PyQt5.QtWidgets import (QApplication, QMessageBox, QMainWindow, QVBoxLayout, QAction, QFileDialog, QDialog, QLabel, QSpinBox)
 from PyQt5.QtCore import *
 from PyQt5.QtGui import QIcon, QPixmap, QPainter,  QBrush, QPen, QColor
 from PyQt5.uic import loadUiType
@@ -25,6 +25,9 @@ class Main(QMainWindow, FROM_MAIN):
         self.Lista_Algoritmos.addItem("K-Means")
         self.Lista_Algoritmos.addItem("DBSCAN")
         self.Lista_Algoritmos.addItem("C")
+        self.Lista_Algoritmos.activated.connect(self.KMEANS_NUM_OBJETOS)
+        #Incializacion Pantallas
+        self.Inicializacion()
         #Declaracion variables globales
         self.dataSet = None
         #Añade el plot a los frames
@@ -34,21 +37,39 @@ class Main(QMainWindow, FROM_MAIN):
         self.l.addWidget(self.sc)
         self.ll = QVBoxLayout(self.deteccion)
         self.ll.addWidget(self.sc2)
-        #PA CAMBIAR EL TEXTO PUES
-        #
-        
-        self.Desplegar_Retroalimentacion()
 
         #Conexion Botones
         self.corrida_1.clicked.connect(self.Prueba_Unitaria)
         self.reconstruir.clicked.connect(self.Reconstruir)
         self.Boton_Detectar.clicked.connect(self.Detectar)
+        self.Boton_Comenzar.clicked.connect(self.Comenzar)
+        self.Boton_Configuraciones.clicked.connect(self.Configuracion)
+        self.Boton_Regresar.clicked.connect(self.Pantalla_Principal)
         #Sepa
         self.Qe = 0
         self.quit = 0
         self.p = 0
     
-    def Desplegar_Retroalimentacion(self):
+    def Inicializacion(self):
+        #Vista/Ocultamiento de Pantallas
+        self.Pantalla_Central.setVisible(False)
+        self.Pantalla_Configuraciones.setVisible(False)
+        self.Pantalla_Presentacion.setVisible(True)
+        #Insertar LOGO UPIITA
+        image = 'icons/Logo_UPIITA_2.png'
+        self.UPIITA_LOGO.setStyleSheet("*{background-color:transparent;}")
+        pixmap = QPixmap(image)
+        self.UPIITA_LOGO.setPixmap(pixmap)
+        self.UPIITA_LOGO.setScaledContents(True)
+        #Insertar selector de Nubm. de objetos a detectar con K-MEANS
+        self.k = QSpinBox(parent=self.Pantalla_Central)
+        self.k.setValue(2)
+        self.k.setMinimum(2)
+        self.k.setMaximum(10)
+        self.k.setGeometry(330,490,40,21)
+        self.k.setVisible(True)
+        #Inicializar/Desplegar Retroalimentacion
+        #Personita
         image = 'icons/persona.png'
         try:
             with open(image):
@@ -65,7 +86,9 @@ class Main(QMainWindow, FROM_MAIN):
         #Retroalimentacion
         self.circuito = []
         self.dibujar = []
-        self.Motor_color = [Qt.yellow,Qt.red,Qt.green,Qt.red,Qt.yellow]
+        #self.Motor_color = [Qt.yellow,Qt.red,Qt.green,Qt.red,Qt.yellow]
+        self.Motor_color = [QColor(0X5E,0XF0,0X0A),QColor(0xAD,0xF7,0x0C),QColor(0xE0,0xDF,0x00),QColor(0XFA,0XE3,0X00),QColor(0XF0,0XC4,0X00),
+                            QColor(0XF0,0X93,0X0C),QColor(0XFA,0X72,0X00),QColor(0XE0,0X46,0X01),QColor(0XFA,0X2C,0X00),QColor(0XF0,0X08,0X00)]
         Motor_Pos  = [[60,65],[120,20],[205,3],[290,20],[345,65]]
         Motor_Size = [[1,1,45,45],[1,1,45,45],[1,1,45,45],[1,1,45,45],[1,1,45,45]] #X,Y,ANCHO,ALTO
         #Dibujar Motores
@@ -73,14 +96,39 @@ class Main(QMainWindow, FROM_MAIN):
             self.circuito.append(QLabel(parent=self.retroalimentacion))
             self.circuito[i].move(Motor_Pos[i][0],Motor_Pos[i][1])
             self.circuito[i].setStyleSheet("*{background-color:transparent;}")
-            canvas = QPixmap(50,50)
+            canvas = QPixmap(54,54)
             canvas.fill(Qt.transparent)
             self.circuito[i].setPixmap(canvas)
             self.dibujar.append(QPainter(self.circuito[i].pixmap()))
             self.dibujar[i].setPen(QPen(self.Motor_color[i],2,Qt.SolidLine))   
             self.dibujar[i].setBrush(QBrush(self.Motor_color[i],Qt.SolidPattern)) 
             self.dibujar[i].drawEllipse(Motor_Size[i][0],Motor_Size[i][1],Motor_Size[i][2],Motor_Size[i][3])
-            self.dibujar[i].end()
+            #self.dibujar[i].end()
+        self.Desplegar_Retroalimentacion(10)
+
+    def KMEANS_NUM_OBJETOS(self):
+        if self.Lista_Algoritmos.currentText()=="K-Means":
+            self.k.setVisible(True)
+        else:   
+            self.k.setVisible(False)
+
+    def Comenzar(self):
+        self.Pantalla_Presentacion.setVisible(False)
+        self.Pantalla_Central.setVisible(True)
+
+    def Desplegar_Retroalimentacion(self,diametro):
+        for i in range(5):
+            #Borrar Circulo
+            self.dibujar[i].setCompositionMode(QPainter.CompositionMode_Clear)
+            self.dibujar[i].eraseRect(0,0,55,55)
+            self.dibujar[i].setCompositionMode(QPainter.CompositionMode_SourceOver)
+            #Dibujar Circulo
+            d= diametro//10-1
+            self.dibujar[i].setPen(QPen(self.Motor_color[d],2,Qt.SolidLine))   
+            self.dibujar[i].setBrush(QBrush(self.Motor_color[d],Qt.SolidPattern)) 
+            d = int(diametro/2); offset= 26-int(d/2)
+            self.dibujar[i].drawEllipse(offset,offset,d,d)
+            self.circuito[i].repaint()
 
     def Reconstruir(self):      
         conversion.bytxt()
@@ -112,10 +160,10 @@ class Main(QMainWindow, FROM_MAIN):
             
             #Inicio de la deteccion
             self.Label_Deteccion.setStyleSheet("*{color:red;}")
-            self.Label_Deteccion.setText("Detectando...")
+            self.Label_Deteccion.setText("Detectando "+str(self.k.value())+" Objetos...")
             self.Label_Deteccion.repaint()
 
-            k = 5
+            k = int(self.k.value())
             TN,chch = conversion.kk(self.dataSet,k)
             #Fin de la deteccion
             self.Label_Deteccion.setText("Deteccion")
@@ -124,6 +172,8 @@ class Main(QMainWindow, FROM_MAIN):
                 self.sc2.ImprimirOBjetos(self.dataSet,TN,chch,1,0)
             except:
                 QMessageBox.critical(self, 'Erorre', "   Erore Plot")
+            
+            self.Desplegar_Retroalimentacion(k*10)
             return
         #Metodo DBSCAN
         if self.Lista_Algoritmos.currentText()=="DBSCAN":
@@ -145,12 +195,27 @@ class Main(QMainWindow, FROM_MAIN):
                 QMessageBox.critical(self, 'Erorre', "   Erore Plot")
             return
 
-
     def Configuracion(self):
-        pass
-    def Quit(self):
-        self.quit = 1
-        self.MessageSave()
+        self.Pantalla_Central.setVisible(False)
+        self.Pantalla_Presentacion.setVisible(False)
+        self.Pantalla_Configuraciones.setVisible(True)
+    
+    def Pantalla_Principal(self):
+        self.Pantalla_Configuraciones.setVisible(False)
+        self.Pantalla_Presentacion.setVisible(False)
+        self.Pantalla_Central.setVisible(True)
+    
+    def closeEvent(self, event):
+        #http://pythondiario.com/2014/12/dialogos-en-pyqt-con-qmessagebox-python.html
+        reply = QMessageBox.question(self, 'Cerrar Aplicacion', '¿Estas seguro de cerrar la aplicación?',
+				QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+        if reply == QMessageBox.Yes:
+            for i in range(5):
+                self.dibujar[i].end()
+            event.accept()
+            #print('Window closed')
+        else:
+            event.ignore()
 
 
 class myCanvas(FigureCanvas):
