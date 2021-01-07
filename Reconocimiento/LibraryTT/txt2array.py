@@ -6,6 +6,7 @@ import csv
 from time import strftime
 import random
 
+
 # Para el DBSCAN
 from numpy import shape
 import scipy as scipy
@@ -31,7 +32,7 @@ def array2txt(data,a):
         
     dir_Sets = os.getcwd()+"/Sets/"
     # file = open(dir_Sets+"prueba_{0}.txt".format(strftime("%y%m%d%H%M%S")),"w")
-    file = open(dir_Sets+"prueba"+str(a)+".txt","w") #.format(strftime("%y%m%d%H%M%S")),"w")
+    file = open(dir_Sets+"objeto"+str(a)+".txt","w") #.format(strftime("%y%m%d%H%M%S")),"w")
     #Acomodar matrix a la forma 3xn
     if np.shape(data)[0]==3:
         data=data.T
@@ -281,7 +282,7 @@ def usar(chch):
     
     for ob in range(0,mv):
         # program = 'cll'+str(ob)+' = conversion.txt2array("./Sets/prueba"+str(ob)+".txt")'
-        program = 'cll'+str(ob)+' = txt2array("./Sets/prueba"+str(ob)+".txt")'
+        program = 'cll'+str(ob)+' = txt2array("./Sets/objeto"+str(ob)+".txt")'
         exec(program)
         
     mt = int(np.amax(chch))
@@ -300,10 +301,9 @@ def usar2(chch,nobj):
     Para poder usar los datos guardados en txt de los planos de cada cumulo
     chch - indica cuantos planos hay y cuantos puntos tiene cada plano
     nobj - indica que cumulo o que objeto es (los obtenidos despues de DBSCAN)
-    """
-    
-    mv = len(chch)
-    
+    """    
+
+    mv = len(chch)    
     for ob in range(1,mv+1):
         # program = 'cll'+str(ob)+' = conversion.txt2array("./Sets/prueba"+str(ob)+".txt")'
         program = 'cll'+str(nobj)+str(ob)+' = txt2array("./Sets/Plano"+str(nobj)+str(ob)+".txt")'
@@ -321,14 +321,15 @@ def usar2(chch,nobj):
     return TN
 
 
-def imprimirObjetos(TN,chch,nnn,cho):
+def imprimirObjetos(DD,TN,chch,nnn,cho):
+        
     plt.ion()
     figura = plt.figure()
     
     grafica = figura.add_subplot(111,projection = '3d')
-    plt.xlim(-210,150)
-    plt.ylim(25,250)
-    grafica.set_zlim(-115,180)
+    plt.xlim(min(DD[:,0])-25,max(DD[:,0])+25)
+    plt.ylim(min(DD[:,1])-25,max(DD[:,1])+25)
+    grafica.set_zlim(min(DD[:,2])-25,max(DD[:,2])+25)
     
     # at = TN.shape
     vcolores = ['b','g','r','c','m','y','k','b','g','r','c','m','y','k','b','g','r','c','m','y','k','b','g','r','c','m']
@@ -341,7 +342,7 @@ def imprimirObjetos(TN,chch,nnn,cho):
             di2 = vformas[ak]
             # vl = TN[ak,:]
             vl = TN[ak,0:int(chch[ak]),:]
-            
+                                    
             [xi,yi,zi] = np.transpose(vl)
             grafica.scatter(xi,yi,zi,
                             color = di1,
@@ -376,8 +377,8 @@ def imprimirObjetos(TN,chch,nnn,cho):
         # for ak in range(0,at[0]):
         di1 = vcolores[cho]
         di2 = vformas[cho]
-        vl = TN[cho,0:int(chch[cho]),:]
-    
+        vl = TN[cho,0:int(chch[cho]),:]        
+        
         [xi,yi,zi] = np.transpose(vl)
         grafica.scatter(xi,yi,zi,
                 color = di1,
@@ -620,8 +621,8 @@ def bytxt():
         
         dir_Sets = os.getcwd()+"/Sets/"
 
-        if os.path.exists(dir_Sets+"prueba"+str(a)+".txt"):
-            os.remove(dir_Sets+"prueba"+str(a)+".txt")
+        if os.path.exists(dir_Sets+"objeto"+str(a)+".txt"):
+            os.remove(dir_Sets+"objeto"+str(a)+".txt")
         
         for aa in range(1,101):
             # if not os.path.isdir("./Sets"):
@@ -774,5 +775,106 @@ def rnsc2(Cl,abcd,ldps,gplns):
     return(abcd,ldps,gplns)
 
 
-
-
+def kk(Cl,k):
+    centros = []
+    
+    etiquetador = []
+    for po in range(1,k+1):
+        etiquetador.append(po)
+    
+    Pertenencia = np.zeros(len(Cl))
+    
+    
+    while (len(centros)<k):
+        random_centro = random.randint(0, len(Cl)-1)
+        # inliers = np.append(inliers,random_index)
+        if (len(centros) == 0):
+            centros.append(random_centro)
+        if ((len(centros) > 0)and(random_centro in centros)):
+            tr = 0
+            while tr != 0:
+                random_centro = random.randint(0, len(Cl)-1) 
+                if (random_centro != centros):
+                    centros.append(random_centro)
+                    tr = 1
+        elif ((len(centros) > 0)and(random_centro != centros)):
+            centros.append(random_centro)
+        
+    kk = 0
+    ck = np.array([[0,0,0]]) # serian los centros de cada cluster, ahorita necesito los k numeros de DD o Cl
+    for i in centros:
+        Pertenencia[i] = etiquetador[kk]
+        ck = np.append(ck,[Cl[i]],axis=0)
+        kk += 1
+    
+    ck = np.delete(ck,0,axis=0)
+    it = 50 # las iteraciones por lo mientras
+    # print(ck)
+    for itera in range(0,it):
+        for ddd in range(0,len(Cl)):
+            if (itera == 0):
+                if (Pertenencia[ddd] > 0):
+                    continue
+            dpx = Cl[ddd,0]
+            dpy = Cl[ddd,1]
+            dpz = Cl[ddd,2]
+            datoprueba = [dpx,dpy,dpz]
+            # La parte usada para conocer a que cluster pertenece cada dato
+            ddptock = [] # distancai euclideana de cada centro al punto prueba
+            for vv in range(0,len(ck)):
+                dck = sqrt(((datoprueba[0]-ck[vv,0])**2)+((datoprueba[1]-ck[vv,1])**2)+((datoprueba[2]-ck[vv,2])**2))
+                ddptock.append(dck)
+            posmin = ddptock.index(min(ddptock))
+            
+            marca = etiquetador[posmin]
+            Pertenencia[ddd] = marca
+        # if itera == 0:
+            # print(Pertenencia)
+            
+        # la actualizacion de centros conforme los datos pertenecientes
+        for vvv in range(0,len(etiquetador)):
+            pk = np.where(Pertenencia == etiquetador[vvv])[0]
+            
+            tdpk = len(pk)
+            
+            sx = 0
+            sy = 0
+            sz = 0
+            for iv in range(0,tdpk):
+                # sx += Cl[int(pk[iv]),0]
+                # sy += Cl[int(pk[iv]),1]
+                # sz += Cl[int(pk[iv]),2]
+                sx += Cl[pk[iv],0]
+                sy += Cl[pk[iv],1]
+                sz += Cl[pk[iv],2]
+            
+            sx = sx/tdpk
+            sy = sy/tdpk
+            sz = sz/tdpk
+            
+            ck[vvv,0] = sx
+            ck[vvv,1] = sy
+            ck[vvv,2] = sz
+    chch = []        
+    for ix in range(0,len(etiquetador)):
+        ppk = np.where(Pertenencia == etiquetador[ix])[0] 
+        chch.append(len(ppk))
+    mchch = max(chch)
+    mv = len(chch)
+    TN = np.zeros((mv,mchch,3))
+    for xi in range(0,len(etiquetador)):
+        ccl = np.zeros([chch[xi],3])
+        pppk = np.where(Pertenencia == etiquetador[xi])[0]    
+        ccc = 0
+        for xii in pppk:
+            ax = Cl[xii,0]
+            ay = Cl[xii,1]
+            az = Cl[xii,2]
+            TN[xi,ccc,:] = [ax,ay,az]
+            ccl[ccc,:] = [ax,ay,az]
+            ccc += 1
+        array2txt(ccl,etiquetador[xi])
+        file = os.listdir("./Sets")
+        file.sort()
+        print("Archivo creado:" +file[xi]) #Imprime el ultimo elemento de la lista
+    return(TN,chch)

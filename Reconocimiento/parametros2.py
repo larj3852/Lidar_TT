@@ -11,7 +11,8 @@ import matplotlib.pyplot as plt
 import random
 import math
 from mpl_toolkits.mplot3d import Axes3D
-import open3d as o3d
+import LibraryTT.Retroalimentacion as retro
+#import open3d as o3d
 
 
 # Parte de los datos
@@ -275,19 +276,27 @@ def DangerDanger(dmd,rci,rce):
         if ((angulo >= 80)and(angulo <= 100)):
             NM = 3
     return(I,NM)
-
+"""
 # Como usarlos o alo así
-cc,lmts = losdatos(TN,chch)
+cc,lmts = retro.losdatos(TN,chch)
 
-md1 = forma1(TN,chch)
-md2 = forma2(TN,chch,cc,lmts)
-md3 = forma3(TN,chch,cc,lmts) 
+md1 = retro.forma1(TN,chch)
+md2 = retro.forma2(TN,chch,cc,lmts)
+md3 = retro.forma3(TN,chch,cc,lmts) 
 
 rci = 50
 rce = 80
-md = md1
-lmd = len(md1)
+md = md2
+lmd = len(md2)
+vec_retro = [0,0,0,0,0]
 for nnn in range(0,lmd):
     dmd = md[nnn,:]
     I,NM = DangerDanger(dmd,rci,rce)
+    print(I,NM)
+    if I>vec_retro[NM]:
+        vec_retro[NM]=I
+
+print(vec_retro)
     # En esta parte pondrias la parte de vibración
+"""
+retro.vec_retro(TN,chch,0)
