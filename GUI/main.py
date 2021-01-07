@@ -90,13 +90,8 @@ class Main(QMainWindow, FROM_MAIN):
         self.Motor_color = [QColor(0X5E,0XF0,0X0A),QColor(0xAD,0xF7,0x0C),QColor(0xE0,0xDF,0x00),QColor(0XFA,0XE3,0X00),QColor(0XF0,0XC4,0X00),
                             QColor(0XF0,0X93,0X0C),QColor(0XFA,0X72,0X00),QColor(0XE0,0X46,0X01),QColor(0XFA,0X2C,0X00),QColor(0XF0,0X08,0X00)]
         Motor_Pos  = [[60,65],[120,20],[205,3],[290,20],[345,65]]
-<<<<<<< HEAD
-        Motor_Size = [[1,1,45,45],[1,1,45,45],[1,1,50,50],[1,1,45,45],[1,1,45,45]] #X,Y,ANCHO,ALTO
-        #Motor1
-=======
         Motor_Size = [[1,1,45,45],[1,1,45,45],[1,1,45,45],[1,1,45,45],[1,1,45,45]] #X,Y,ANCHO,ALTO
         #Dibujar Motores
->>>>>>> 5406a1ef646bfe8d0bca1cde824c76aeeed313dc
         for i in range(5):
             self.circuito.append(QLabel(parent=self.retroalimentacion))
             self.circuito[i].move(Motor_Pos[i][0],Motor_Pos[i][1])
@@ -109,16 +104,7 @@ class Main(QMainWindow, FROM_MAIN):
             self.dibujar[i].setBrush(QBrush(self.Motor_color[i],Qt.SolidPattern)) 
             self.dibujar[i].drawEllipse(Motor_Size[i][0],Motor_Size[i][1],Motor_Size[i][2],Motor_Size[i][3])
             #self.dibujar[i].end()
-<<<<<<< HEAD
-        
-        self.dibujar[2].setPen(QPen(Qt.black,2,Qt.SolidLine))   
-        self.dibujar[2].setBrush(QBrush(Qt.black,Qt.SolidPattern))
-        self.dibujar[2].drawEllipse(10,10,10,20)
-        self.dibujar[2].setCompositionMode(QPainter.CompositionMode_Source)
-        self.dibujar[2].fillRect(0, 0, 500, 500, Qt.transparent)
-=======
         self.Desplegar_Retroalimentacion(10)
->>>>>>> 5406a1ef646bfe8d0bca1cde824c76aeeed313dc
 
     def KMEANS_NUM_OBJETOS(self):
         if self.Lista_Algoritmos.currentText()=="K-Means":
