@@ -121,6 +121,21 @@
      <string notr="true">*{
 	background-color:#222;
 }
+/*******Etiquetas********/
+QLabel{
+	color:#eee;
+	font-size:20px;
+	font:&quot;Arial&quot;;
+	qproperty-alignment: AlignRight;
+}
+#min_max{
+	font-size:14px;
+	color: yellow;
+}
+/****SpinBoxes¨*****/
+QSpinBox{
+	background-color:white;
+}
 
 /*Boton Regresar*/
 #Boton_Regresar{
@@ -148,6 +163,119 @@
      </property>
      <property name="text">
       <string>Regresar</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label">
+     <property name="geometry">
+      <rect>
+       <x>50</x>
+       <y>80</y>
+       <width>161</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Angulo Apertura:</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_2">
+     <property name="geometry">
+      <rect>
+       <x>109</x>
+       <y>131</y>
+       <width>101</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Paso:</string>
+     </property>
+    </widget>
+    <widget class="QSpinBox" name="ang_min">
+     <property name="geometry">
+      <rect>
+       <x>230</x>
+       <y>80</y>
+       <width>70</width>
+       <height>30</height>
+      </rect>
+     </property>
+     <property name="minimum">
+      <number>80</number>
+     </property>
+     <property name="maximum">
+      <number>150</number>
+     </property>
+     <property name="singleStep">
+      <number>5</number>
+     </property>
+    </widget>
+    <widget class="QSpinBox" name="ang_max">
+     <property name="geometry">
+      <rect>
+       <x>320</x>
+       <y>80</y>
+       <width>70</width>
+       <height>30</height>
+      </rect>
+     </property>
+     <property name="minimum">
+      <number>40</number>
+     </property>
+     <property name="maximum">
+      <number>160</number>
+     </property>
+     <property name="singleStep">
+      <number>5</number>
+     </property>
+     <property name="value">
+      <number>90</number>
+     </property>
+    </widget>
+    <widget class="QSpinBox" name="ang_paso">
+     <property name="geometry">
+      <rect>
+       <x>230</x>
+       <y>130</y>
+       <width>70</width>
+       <height>30</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_3">
+     <property name="geometry">
+      <rect>
+       <x>50</x>
+       <y>180</y>
+       <width>160</width>
+       <height>30</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Altura Usuario [cm]:</string>
+     </property>
+    </widget>
+    <widget class="QSpinBox" name="altura_usuario">
+     <property name="geometry">
+      <rect>
+       <x>230</x>
+       <y>180</y>
+       <width>70</width>
+       <height>30</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QLabel" name="min_max">
+     <property name="geometry">
+      <rect>
+       <x>210</x>
+       <y>60</y>
+       <width>161</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string> min                      max</string>
      </property>
     </widget>
    </widget>
@@ -455,6 +583,9 @@ QLabel{
      </property>
     </widget>
    </widget>
+   <zorder>Pantalla_Presentacion</zorder>
+   <zorder>Pantalla_Central</zorder>
+   <zorder>Pantalla_Configuraciones</zorder>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
