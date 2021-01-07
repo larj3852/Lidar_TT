@@ -55,7 +55,7 @@ class Main(QMainWindow, FROM_MAIN):
         self.dibujar = []
         self.Motor_color = [Qt.yellow,Qt.red,Qt.green,Qt.red,Qt.yellow]
         Motor_Pos  = [[60,65],[120,20],[205,3],[290,20],[345,65]]
-        Motor_Size = [[1,1,45,45],[1,1,45,45],[1,1,45,45],[1,1,45,45],[1,1,45,45]] #X,Y,ANCHO,ALTO
+        Motor_Size = [[1,1,45,45],[1,1,45,45],[1,1,50,50],[1,1,45,45],[1,1,45,45]] #X,Y,ANCHO,ALTO
         #Motor1
         for i in range(5):
             self.circuito.append(QLabel(parent=self.retroalimentacion))
@@ -68,7 +68,13 @@ class Main(QMainWindow, FROM_MAIN):
             self.dibujar[i].setPen(QPen(self.Motor_color[i],2,Qt.SolidLine))   
             self.dibujar[i].setBrush(QBrush(self.Motor_color[i],Qt.SolidPattern)) 
             self.dibujar[i].drawEllipse(Motor_Size[i][0],Motor_Size[i][1],Motor_Size[i][2],Motor_Size[i][3])
-            self.dibujar[i].end()
+            #self.dibujar[i].end()
+        
+        self.dibujar[2].setPen(QPen(Qt.black,2,Qt.SolidLine))   
+        self.dibujar[2].setBrush(QBrush(Qt.black,Qt.SolidPattern))
+        self.dibujar[2].drawEllipse(10,10,10,20)
+        self.dibujar[2].setCompositionMode(QPainter.CompositionMode_Source)
+        self.dibujar[2].fillRect(0, 0, 500, 500, Qt.transparent)
 
     def Plot3D(self):
         global filename
