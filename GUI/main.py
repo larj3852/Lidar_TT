@@ -10,6 +10,7 @@ from mpl_toolkits.mplot3d import axis3d ,axes3d
 import matplotlib.pyplot as plt
 from time import sleep
 import LibraryTT.txt2array as conversion
+import LibraryTT.Lidar3D as Lidar
 import numpy as np
 
 scriptDir = dirname(realpath(__file__))
@@ -105,6 +106,8 @@ class Main(QMainWindow, FROM_MAIN):
             self.dibujar[i].drawEllipse(Motor_Size[i][0],Motor_Size[i][1],Motor_Size[i][2],Motor_Size[i][3])
             #self.dibujar[i].end()
         self.Desplegar_Retroalimentacion(10)
+        #Inicializacion Lidar
+        self.scan = Lidar.Scaner3D()
 
     def KMEANS_NUM_OBJETOS(self):
         if self.Lista_Algoritmos.currentText()=="K-Means":
@@ -131,10 +134,14 @@ class Main(QMainWindow, FROM_MAIN):
             self.circuito[i].repaint()
 
     def Reconstruir(self):      
-        conversion.bytxt()
-        self.dataSet = conversion.txt2array()
-        self.dataSet = np.delete(self.dataSet,0,axis=0)
+        #conversion.bytxt()
+        #self.dataSet = conversion.txt2array()
+        #self.dataSet = np.delete(self.dataSet,0,axis=0)
+        print(self.scan)
+        print("Reconstruyendo")
+        self.dataSet = self.scan.Scanear(Angulo_Init=50,Angulo_Fin=150,paso=5,plotear=False)
         #DD = np.copy(D)
+        print("Fin reconstruccion")
         try:
             self.sc.plot1(self.dataSet[:,0], self.dataSet[:,1], self.dataSet[:,2])
         except:
