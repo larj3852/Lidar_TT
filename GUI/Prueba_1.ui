@@ -128,7 +128,7 @@ QLabel{
 	font:&quot;Arial&quot;;
 	qproperty-alignment: AlignRight;
 }
-#min_max{
+#min_max,#min_max_2{
 	font-size:14px;
 	color: yellow;
 }
@@ -322,6 +322,70 @@ QComboBox{
        <string>C</string>
       </property>
      </item>
+    </widget>
+    <widget class="QLabel" name="label_5">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>290</y>
+       <width>201</width>
+       <height>30</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Diametro de Detección:</string>
+     </property>
+    </widget>
+    <widget class="QSpinBox" name="dim_min">
+     <property name="geometry">
+      <rect>
+       <x>230</x>
+       <y>290</y>
+       <width>70</width>
+       <height>30</height>
+      </rect>
+     </property>
+     <property name="minimum">
+      <number>80</number>
+     </property>
+     <property name="maximum">
+      <number>150</number>
+     </property>
+     <property name="singleStep">
+      <number>5</number>
+     </property>
+    </widget>
+    <widget class="QSpinBox" name="dim_max">
+     <property name="geometry">
+      <rect>
+       <x>320</x>
+       <y>290</y>
+       <width>70</width>
+       <height>30</height>
+      </rect>
+     </property>
+     <property name="minimum">
+      <number>80</number>
+     </property>
+     <property name="maximum">
+      <number>150</number>
+     </property>
+     <property name="singleStep">
+      <number>5</number>
+     </property>
+    </widget>
+    <widget class="QLabel" name="min_max_2">
+     <property name="geometry">
+      <rect>
+       <x>210</x>
+       <y>270</y>
+       <width>161</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string> min                      max</string>
+     </property>
     </widget>
    </widget>
    <widget class="QWidget" name="Pantalla_Central" native="true">
@@ -561,7 +625,7 @@ QLabel{
       <rect>
        <x>10</x>
        <y>2</y>
-       <width>150</width>
+       <width>331</width>
        <height>21</height>
       </rect>
      </property>
