@@ -136,7 +136,11 @@ QLabel{
 QSpinBox{
 	background-color:white;
 }
-
+/*******Lista Desplegable****/
+QComboBox{
+	background-color:white;
+	color: black;
+}
 /*Boton Regresar*/
 #Boton_Regresar{
 	background-color:#97000A;
@@ -245,9 +249,9 @@ QSpinBox{
     <widget class="QLabel" name="label_3">
      <property name="geometry">
       <rect>
-       <x>50</x>
+       <x>29</x>
        <y>180</y>
-       <width>160</width>
+       <width>181</width>
        <height>30</height>
       </rect>
      </property>
@@ -277,6 +281,47 @@ QSpinBox{
      <property name="text">
       <string> min                      max</string>
      </property>
+    </widget>
+    <widget class="QLabel" name="label_4">
+     <property name="geometry">
+      <rect>
+       <x>9</x>
+       <y>230</y>
+       <width>201</width>
+       <height>30</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Método de Detección:</string>
+     </property>
+    </widget>
+    <widget class="QComboBox" name="comboBox">
+     <property name="geometry">
+      <rect>
+       <x>230</x>
+       <y>230</y>
+       <width>71</width>
+       <height>25</height>
+      </rect>
+     </property>
+     <property name="maxVisibleItems">
+      <number>4</number>
+     </property>
+     <item>
+      <property name="text">
+       <string>A</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>B</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>C</string>
+      </property>
+     </item>
     </widget>
    </widget>
    <widget class="QWidget" name="Pantalla_Central" native="true">
@@ -582,6 +627,19 @@ QLabel{
       <string>Seleccione Algoritmo de deteccion</string>
      </property>
     </widget>
+    <zorder>corrida_1</zorder>
+    <zorder>corrida_N</zorder>
+    <zorder>deteccion</zorder>
+    <zorder>reconstrucion</zorder>
+    <zorder>reconstruir</zorder>
+    <zorder>Boton_Detectar</zorder>
+    <zorder>Boton_Configuraciones</zorder>
+    <zorder>Label_Reconstruccion</zorder>
+    <zorder>Label_Deteccion</zorder>
+    <zorder>Label_Retroalimentacion</zorder>
+    <zorder>Lista_Algoritmos</zorder>
+    <zorder>Label_Algoritmo</zorder>
+    <zorder>retroalimentacion</zorder>
    </widget>
    <zorder>Pantalla_Presentacion</zorder>
    <zorder>Pantalla_Central</zorder>
