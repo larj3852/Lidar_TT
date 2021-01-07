@@ -11,6 +11,7 @@ import matplotlib.pyplot as plt
 from time import sleep
 import LibraryTT.txt2array as conversion
 import LibraryTT.Lidar3D as Lidar
+import LibraryTT.Retroalimentacion as retro
 import numpy as np
 
 scriptDir = dirname(realpath(__file__))
@@ -105,9 +106,27 @@ class Main(QMainWindow, FROM_MAIN):
             self.dibujar[i].setBrush(QBrush(self.Motor_color[i],Qt.SolidPattern)) 
             self.dibujar[i].drawEllipse(Motor_Size[i][0],Motor_Size[i][1],Motor_Size[i][2],Motor_Size[i][3])
             #self.dibujar[i].end()
-        self.Desplegar_Retroalimentacion(10)
+        self.Desplegar_Retroalimentacion([50,50,50,50,50])
         #Inicializacion Lidar
         self.scan = Lidar.Scaner3D()
+        #Menu configuraciones
+            #ALtura usuario
+        self.altura_usuario.setMaximum(200)
+        self.altura_usuario.setMinimum(120)
+        self.altura_usuario.setValue(120)
+            #Angulo Vision
+        self.ang_min.setMaximum(150)
+        self.ang_min.setMinimum(30)
+        self.ang_min.setValue(50)
+        self.ang_min.setSingleStep(5)
+        self.ang_max.setMaximum(160)
+        self.ang_max.setMinimum(40)
+        self.ang_max.setValue(80)
+        self.ang_max.setSingleStep(5)
+        self.ang_paso.setMaximum(10)
+        self.ang_paso.setMinimum(1) 
+        self.ang_paso.setValue(5)
+        
 
     def KMEANS_NUM_OBJETOS(self):
         if self.Lista_Algoritmos.currentText()=="K-Means":
@@ -126,10 +145,10 @@ class Main(QMainWindow, FROM_MAIN):
             self.dibujar[i].eraseRect(0,0,55,55)
             self.dibujar[i].setCompositionMode(QPainter.CompositionMode_SourceOver)
             #Dibujar Circulo
-            d= diametro//10-1
+            d= diametro[i]//10-1
             self.dibujar[i].setPen(QPen(self.Motor_color[d],2,Qt.SolidLine))   
             self.dibujar[i].setBrush(QBrush(self.Motor_color[d],Qt.SolidPattern)) 
-            d = int(diametro/2); offset= 26-int(d/2)
+            d = int(diametro[i]/2); offset= 26-int(d/2)
             self.dibujar[i].drawEllipse(offset,offset,d,d)
             self.circuito[i].repaint()
 
@@ -139,7 +158,8 @@ class Main(QMainWindow, FROM_MAIN):
         #self.dataSet = np.delete(self.dataSet,0,axis=0)
         print(self.scan)
         print("Reconstruyendo")
-        self.dataSet = self.scan.Scanear(Angulo_Init=50,Angulo_Fin=150,paso=5,plotear=False)
+        #ang min | ang max | step |plotear (T/F)
+        self.dataSet = self.scan.Scanear(self.ang_min.value(),self.ang_max.value(),self.ang_paso.value(),plotear=False)
         #DD = np.copy(D)
         print("Fin reconstruccion")
         try:
@@ -148,14 +168,9 @@ class Main(QMainWindow, FROM_MAIN):
             QMessageBox.critical(self, 'Erorre', "   Erore Plot")
         
     def Prueba_Unitaria(self):
-        if self.dataSet is None:
-            return
-        try:
             self.Reconstruir()
             self.Detectar()
-        except:
-            QMessageBox.critical(self, 'Erorre', "   Erore Plot")
-
+        
     def Prueba_Continua(self):
         pass
 
@@ -180,8 +195,7 @@ class Main(QMainWindow, FROM_MAIN):
             except:
                 QMessageBox.critical(self, 'Erorre', "   Erore Plot")
             
-            self.Desplegar_Retroalimentacion(k*10)
-            return
+        
         #Metodo DBSCAN
         if self.Lista_Algoritmos.currentText()=="DBSCAN":
             #Inicio de la deteccion
@@ -200,7 +214,10 @@ class Main(QMainWindow, FROM_MAIN):
                 self.sc2.ImprimirOBjetos(self.dataSet,TN,chch,1,0)
             except:
                 QMessageBox.critical(self, 'Erorre', "   Erore Plot")
-            return
+
+        Porcentajes = retro.vec_retro(TN,chch,0)
+        self.Desplegar_Retroalimentacion(Porcentajes)
+        return
 
     def Configuracion(self):
         self.Pantalla_Central.setVisible(False)
