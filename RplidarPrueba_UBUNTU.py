@@ -1,10 +1,10 @@
 #%%
-import rplidar  as rplidar
+from LibraryTT import rplidar
 import serial
 from time import sleep,time
 import numpy as np
 import matplotlib.pyplot as plt
-#%%
+#%% ----------------------------------------------------------------------------------
 lidar = rplidar.RPLidar('COM4')
 sleep(1)
 info =lidar.get_info()
@@ -35,21 +35,21 @@ def recorte():
     aux = scan[lista]
     return aux
 
-#%%
+#%% ------------------------------------------------------------------------
 for j in range(0,1):
     lidar.connect()
     lidar._serial_port.flushInput()
     print(len(lidar._serial_port.read_all()))
     
     i=0
-    for scan in lidar.iter_scans():
-        process_scan(scan)
+    scan=[]
+    for scan_aux in lidar.iter_scans():
+        process_scan(scan_aux)
         i+=1
-
-        if i>= 3:
+        scan.extend(scan_aux)
+        if i>= 12:
             break
     print(len(scan))
-    print(scan)
     scan=np.array(scan)
     t1 = time()
     scan = recorte()
@@ -81,10 +81,10 @@ ax = fig.add_subplot(111, projection='polar')
 c=ax.scatter(1.5*np.pi-scan[:,1]*(np.pi/180),scan[:,2])
 #plt.polar(+np.pi/2-scan[:,1]*(np.pi/180),scan[:,2],label="Lidar 90°",linestyle="dashed")
 """
-# %%
+# %% -----------------------------------------------------------------------------
 plt.show()
 fig
-# %% Terminar conexion
+# %% Terminar conexion --------------------------------------------------------------------
 # lidar.stop_motor()
 # lidar.disconnect()
 lidar._serial_port._close()

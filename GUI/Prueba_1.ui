@@ -32,6 +32,125 @@
      <verstretch>60</verstretch>
     </sizepolicy>
    </property>
+   <widget class="QWidget" name="Pantalla_Presentacion" native="true">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>901</width>
+      <height>581</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">*{
+	background-color: #222;
+}
+
+#Label_Titulo{
+	font-size:20px;
+	color: #eee;
+	font-style: bold;
+	text-align: center;
+}
+
+#Boton_Comenzar{
+	background-color:#DCAC0F;
+	border-radius:20px;
+	font-size:20px;
+	color:white;
+}
+#Boton_Comenzar:hover{
+	background-color:#FF1994;
+}
+#Boton_Comenzar:pressed{
+	background-color: white;
+	color: black;
+}</string>
+    </property>
+    <widget class="QPushButton" name="Boton_Comenzar">
+     <property name="geometry">
+      <rect>
+       <x>375</x>
+       <y>480</y>
+       <width>150</width>
+       <height>41</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Comenzar</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="Label_Titulo">
+     <property name="geometry">
+      <rect>
+       <x>175</x>
+       <y>380</y>
+       <width>550</width>
+       <height>70</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Prototipo de Identificación de Objetos en el Plano Frontal 
+     para la Asistencia en el Desplazamiento Autonomo</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="UPIITA_LOGO">
+     <property name="geometry">
+      <rect>
+       <x>275</x>
+       <y>20</y>
+       <width>350</width>
+       <height>350</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QWidget" name="Pantalla_Configuraciones" native="true">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>901</width>
+      <height>581</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">*{
+	background-color:#222;
+}
+
+/*Boton Regresar*/
+#Boton_Regresar{
+	background-color:#97000A;
+	border-radius:20px;
+	font-size:20px;
+	color:white;
+}
+#Boton_Regresar:hover{
+	background-color:#1C993A;
+}
+#Boton_Regresar:pressed{
+	background-color: #02E83B;
+	color: black;
+}</string>
+    </property>
+    <widget class="QPushButton" name="Boton_Regresar">
+     <property name="geometry">
+      <rect>
+       <x>50</x>
+       <y>410</y>
+       <width>181</width>
+       <height>41</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Regresar</string>
+     </property>
+    </widget>
+   </widget>
    <widget class="QWidget" name="Pantalla_Central" native="true">
     <property name="enabled">
      <bool>true</bool>
@@ -78,7 +197,7 @@
 #corrida_1,
 #corrida_N,
 #reconstruir,
-#detectar{
+#Boton_Detectar{
 	background-color: #9e007f;
 	border-radius: 5px;
 	font-size: 15px;
@@ -88,14 +207,14 @@
 }
 
 #corrida_1:hover,#corrida_N:hover,
- #reconstruir:hover, #detectar:hover {
+ #reconstruir:hover, #Boton_Detectar:hover {
 	background-color:#330033;
 	font-size:16px;
 	border-radius:10px;
 }
 
 #corrida_1:pressed,#corrida_N:pressed,
- #reconstruir:pressed, #detectar:pressed {
+ #reconstruir:pressed, #Boton_Detectar:pressed {
 	background-color:#FFFFFF;
 	color:black;
 }
@@ -108,18 +227,22 @@
 	}
 
 #reconstruir,
-#detectar{
+#Boton_Detectar{
 	color: white;
 	font-size:13;
 	background-color: #0a3194;
 	border-radius: 10px;
 }
 
-#configuraciones{
+#Boton_Configuraciones{
 	color: #555;
-	font-size:15;
+	font-size:15px;
 	background-color: #f2bf00;
 	border-radius: 10px;
+}
+#Boton_Configuraciones:pressed{
+	background-color:#2330A8;
+	color:#F5D92C;
 }
 
 QLabel{
@@ -205,7 +328,7 @@ QLabel{
     <widget class="QFrame" name="reconstrucion">
      <property name="geometry">
       <rect>
-       <x>5</x>
+       <x>0</x>
        <y>30</y>
        <width>440</width>
        <height>350</height>
@@ -234,7 +357,7 @@ QLabel{
       <string>Reconstruir</string>
      </property>
     </widget>
-    <widget class="QPushButton" name="detectar">
+    <widget class="QPushButton" name="Boton_Detectar">
      <property name="geometry">
       <rect>
        <x>10</x>
@@ -247,7 +370,7 @@ QLabel{
       <string>Detectar</string>
      </property>
     </widget>
-    <widget class="QPushButton" name="configuraciones">
+    <widget class="QPushButton" name="Boton_Configuraciones">
      <property name="geometry">
       <rect>
        <x>10</x>
@@ -278,7 +401,7 @@ QLabel{
       <rect>
        <x>450</x>
        <y>3</y>
-       <width>150</width>
+       <width>421</width>
        <height>21</height>
       </rect>
      </property>
@@ -299,33 +422,24 @@ QLabel{
       <string>Retroalimentacion</string>
      </property>
     </widget>
-    <widget class="QComboBox" name="comboBox">
+    <widget class="QComboBox" name="Lista_Algoritmos">
      <property name="geometry">
       <rect>
        <x>170</x>
        <y>490</y>
        <width>151</width>
-       <height>25</height>
+       <height>21</height>
       </rect>
      </property>
      <property name="editable">
       <bool>false</bool>
      </property>
-     <item>
-      <property name="text">
-       <string>Alg_1</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Alg_2</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Alg_3</string>
-      </property>
-     </item>
+     <property name="insertPolicy">
+      <enum>QComboBox::InsertAtTop</enum>
+     </property>
+     <property name="sizeAdjustPolicy">
+      <enum>QComboBox::AdjustToContentsOnFirstShow</enum>
+     </property>
     </widget>
     <widget class="QLabel" name="Label_Algoritmo">
      <property name="geometry">
@@ -341,23 +455,6 @@ QLabel{
      </property>
     </widget>
    </widget>
-   <widget class="QWidget" name="Pantalla_Presentacion" native="true">
-    <property name="geometry">
-     <rect>
-      <x>0</x>
-      <y>0</y>
-      <width>800</width>
-      <height>600</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">*{
-	background-color: #ddd;
-}</string>
-    </property>
-   </widget>
-   <zorder>Pantalla_Presentacion</zorder>
-   <zorder>Pantalla_Central</zorder>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
@@ -365,8 +462,8 @@ QLabel{
   <tabstop>corrida_1</tabstop>
   <tabstop>corrida_N</tabstop>
   <tabstop>reconstruir</tabstop>
-  <tabstop>detectar</tabstop>
-  <tabstop>configuraciones</tabstop>
+  <tabstop>Boton_Detectar</tabstop>
+  <tabstop>Boton_Configuraciones</tabstop>
  </tabstops>
  <resources/>
  <connections/>
