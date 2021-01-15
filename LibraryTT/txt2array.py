@@ -1,6 +1,7 @@
 #%%
 import numpy as np
 import matplotlib.pyplot as plt
+import matplotlib.cm as cm
 import os
 import csv
 from time import strftime
@@ -125,10 +126,10 @@ def imprimir3D(array):
     
     #Configuracion Inicial
     fig = plt.figure()
+    fig .subplots_adjust(left=0, bottom=0, right=1.0, top=1.0)
     ax = fig.add_subplot(111, projection='3d')
-
     #   Punto de  origen, activacion de la maya y edicion de labels
-    ax.scatter(0, 0, 0, marker='o');   #Origen
+    ax.scatter(0, 0, 0, marker="D",color=	'k');   #Origen
     ax.legend(b)
     ax.set_xlabel("x")
     ax.set_ylabel("y")
@@ -142,7 +143,9 @@ def imprimir3D(array):
     if np.shape(array)[0]==3:
         array=array.T
     #   Scaneo de los datos
-    ax.scatter(array[:,0], array[:,1], array[:,2], marker='.')
+    print(np.shape(array))
+    ax.scatter(array[:,0], array[:,1], array[:,2] , marker='.',c=array[:,1],cmap="spring")
+    #ax.scatter(array[:,0], array[:,1], array[:,2] , marker='.',c=array[:,1],cmap="tab20b")
     plt.show()
 
     
