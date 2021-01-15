@@ -19,9 +19,9 @@ class PWM1(threading.Thread):
         GPIO.setwarnings(False)
         self.pwm=[]
         """
-        NOTAS: PINES 11,12,13,15,16 EN USO
+        NOTAS: PINES 11,13,15,16,18 EN USO
         """
-        self.PIN=[11,12,13,15,16]
+        self.PIN=[11,13,15,16,18]
         for i in range(5):
             GPIO.setup(self.PIN[i], GPIO.OUT, initial=GPIO.LOW)
             self.pwm.append(GPIO.PWM(self.PIN[i],100))
@@ -44,7 +44,7 @@ class PWM1(threading.Thread):
 """
 #CODIGO EJEMPLO
 PIN=[11,12,13,15,16]
-CICLE = [1,10,50,100,20]
+CICLE = [100,10,50,100,100]
 thread1 = PWM1(CICLE)
 thread1.start()
 thread1.join() #Espeara a que termine su ejecución

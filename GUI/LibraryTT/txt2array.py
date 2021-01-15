@@ -16,6 +16,31 @@ from matplotlib import cm
 from math import sqrt
 import math
 
+def GuardarSet_txt(data):
+    """  
+    Generacion de un archivo de texto *.txt de la nube de puntos
+    lidar en coordenadas cartesianas a partir de un array, 
+    que se guardará en la carpeta "./Sets"
+    @input          LidarPoints_array dimensions: nx3
+    @output         N/A
+    """
+    #Comprobar si existe la carpeta de CSV
+    if not os.path.isdir("./Sets"):
+        os.mkdir(os.getcwd()+"/Sets")
+        file_num=0
+        
+    dir_Sets = os.getcwd()+"/Sets/"
+    file = open(dir_Sets+"prueba_{0}.txt".format(strftime("%y%m%d%H%M%S")),"w")
+    
+    #Acomodar matrix a la forma 3xn
+    if np.shape(data)[0]==3:
+        data=data.T
+    for vec in data:
+        txt=f"{vec[0]}\t{vec[1]}\t{vec[2]}\n"
+        file.write(txt)
+    file.close()
+
+
 #%%
 def array2txt(data,a):
     """  

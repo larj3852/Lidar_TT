@@ -47,7 +47,7 @@ class Servo:
         Funcion para parar el servor
         """
         self.setAngle(90)
-        GPIO.cleanup()
+        #GPIO.cleanup()
     
     def __del__(self):
         """
