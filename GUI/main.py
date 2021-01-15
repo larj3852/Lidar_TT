@@ -47,10 +47,6 @@ class Main(QMainWindow, FROM_MAIN):
         self.Boton_Comenzar.clicked.connect(self.Comenzar)
         self.Boton_Configuraciones.clicked.connect(self.Configuracion)
         self.Boton_Regresar.clicked.connect(self.Pantalla_Principal)
-        #Sepa
-        self.Qe = 0
-        self.quit = 0
-        self.p = 0
     
     def Inicializacion(self):
         #Vista/Ocultamiento de Pantallas
@@ -67,7 +63,7 @@ class Main(QMainWindow, FROM_MAIN):
         self.k = QSpinBox(parent=self.Pantalla_Central)
         self.k.setValue(2)
         self.k.setMinimum(2)
-        self.k.setMaximum(10)
+        self.k.setMaximum(20)
         self.k.setGeometry(330,490,40,21)
         self.k.setVisible(True)
         #Inicializar/Desplegar Retroalimentacion
@@ -107,6 +103,11 @@ class Main(QMainWindow, FROM_MAIN):
             self.dibujar[i].drawEllipse(Motor_Size[i][0],Motor_Size[i][1],Motor_Size[i][2],Motor_Size[i][3])
             #self.dibujar[i].end()
         self.Desplegar_Retroalimentacion([50,50,50,50,50])
+        #Prueba de Motores Vibradores
+        CICLE = [20,20,20,20,20]
+        thread1 = retro.PWM1(CICLE)
+        thread1.start()
+        
         #Inicializacion Lidar
         self.scan = Lidar.Scaner3D()
         #Menu configuraciones
@@ -117,15 +118,22 @@ class Main(QMainWindow, FROM_MAIN):
             #Angulo Vision
         self.ang_min.setMaximum(150)
         self.ang_min.setMinimum(30)
-        self.ang_min.setValue(50)
+        self.ang_min.setValue(70)
         self.ang_min.setSingleStep(5)
         self.ang_max.setMaximum(160)
         self.ang_max.setMinimum(40)
-        self.ang_max.setValue(80)
+        self.ang_max.setValue(120)
         self.ang_max.setSingleStep(5)
         self.ang_paso.setMaximum(10)
         self.ang_paso.setMinimum(1) 
         self.ang_paso.setValue(5)
+            #diametro retroalimentacion
+        self.dim_min.setMaximum(590)
+        self.dim_min.setMinimum(30)
+        self.dim_min.setValue(60)
+        self.dim_max.setMaximum(600)
+        self.dim_max.setMinimum(50)
+        self.dim_max.setValue(200)
         
 
     def KMEANS_NUM_OBJETOS(self):
@@ -152,31 +160,39 @@ class Main(QMainWindow, FROM_MAIN):
             self.dibujar[i].drawEllipse(offset,offset,d,d)
             self.circuito[i].repaint()
 
-    def Reconstruir(self):      
-        #conversion.bytxt()
-        #self.dataSet = conversion.txt2array()
-        #self.dataSet = np.delete(self.dataSet,0,axis=0)
+    def Reconstruir(self):
+        #A traves de scripts
+        #   conversion.bytxt()
+        #   self.dataSet = conversion.txt2array()
+        #   self.dataSet = np.delete(self.dataSet,0,axis=0)
+        #Con sensor Lidar
         print(self.scan)
-        print("Reconstruyendo")
+        #Inicio de la reconstruccion
+        self.Label_Reconstruccion.setStyleSheet("*{color:green;}")
+        self.Label_Reconstruccion.setText("Reconstruyendo...")
+        self.Label_Reconstruccion.repaint()
         #ang min | ang max | step |plotear (T/F)
-        self.dataSet = self.scan.Scanear(self.ang_min.value(),self.ang_max.value(),self.ang_paso.value(),plotear=False)
-        #DD = np.copy(D)
-        print("Fin reconstruccion")
+        self.dataSet = self.scan.Scanear(self.ang_min.value(),self.ang_max.value(),self.ang_paso.value(),revxplano = 8,plotear=False)
+        num = len(self.dataSet)
+        #Fin de la reconstruccion
+        self.Label_Reconstruccion.setStyleSheet("*{color:#555;}")
+        self.Label_Reconstruccion.setText(str(num)+" puntos detectados")
+        self.Label_Reconstruccion.repaint()
+        
         try:
             self.sc.plot1(self.dataSet[:,0], self.dataSet[:,1], self.dataSet[:,2])
         except:
             QMessageBox.critical(self, 'Erorre', "   Erore Plot")
-        
-    def Prueba_Unitaria(self):
-            self.Reconstruir()
-            self.Detectar()
-        
-    def Prueba_Continua(self):
-        pass
 
     def Detectar(self):
         if self.dataSet is None:
             return
+            
+        #Lo que agregó matias
+        AS = 170
+        AL = 110
+        DD = np.copy(self.dataSet)
+        DD = retro.QuitarDatos(DD,AS,AL)
         #Metodo K-MEANS
         if self.Lista_Algoritmos.currentText()=="K-Means":
             
@@ -186,7 +202,7 @@ class Main(QMainWindow, FROM_MAIN):
             self.Label_Deteccion.repaint()
 
             k = int(self.k.value())
-            TN,chch = conversion.kk(self.dataSet,k)
+            TN,chch = conversion.kk(DD,k)
             #Fin de la deteccion
             self.Label_Deteccion.setText("Deteccion")
             self.Label_Deteccion.setStyleSheet("*{color:#555;}")
@@ -205,7 +221,7 @@ class Main(QMainWindow, FROM_MAIN):
 
             Epsilon = 40 #35 #30
             MinPts =  20 #40 #75 #78
-            chch = conversion.RObjetos(self.dataSet,Epsilon,MinPts)
+            chch = conversion.RObjetos(DD,Epsilon,MinPts)
             TN = conversion.usar(chch)
             #Fin de la deteccion
             self.Label_Deteccion.setText("Deteccion")
@@ -214,10 +230,24 @@ class Main(QMainWindow, FROM_MAIN):
                 self.sc2.ImprimirOBjetos(self.dataSet,TN,chch,1,0)
             except:
                 QMessageBox.critical(self, 'Erorre', "   Erore Plot")
-
-        Porcentajes = retro.vec_retro(TN,chch,0)
+        #ACTUALIZACION MOTORES
+        b=int(self.comboBox.currentIndex())
+        rci=int(self.dim_min.value())
+        rce=int(self.dim_max.value())
+        print(f"Indice {b}")
+        Porcentajes = retro.vec_retro(TN,chch,b,rci,rce)    #b --> Metodo detecion arg(TN,chch,metodo=0,rci,rce)
+            #Envio de respuesta a motores
+        thread1 = retro.PWM1(Porcentajes)
+        thread1.start()
         self.Desplegar_Retroalimentacion(Porcentajes)
         return
+    
+    def Prueba_Unitaria(self):
+            self.Reconstruir()
+            self.Detectar()
+        
+    def Prueba_Continua(self):
+        pass
 
     def Configuracion(self):
         self.Pantalla_Central.setVisible(False)
@@ -234,6 +264,7 @@ class Main(QMainWindow, FROM_MAIN):
         reply = QMessageBox.question(self, 'Cerrar Aplicacion', '¿Estas seguro de cerrar la aplicación?',
 				QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
         if reply == QMessageBox.Yes:
+            #La limpieza de pines se da al destruir el objeto Servomotor
             for i in range(5):
                 self.dibujar[i].end()
             event.accept()
@@ -253,7 +284,7 @@ class myCanvas(FigureCanvas):
         self.ax = self.fig.add_subplot(111, projection = '3d')
         self.ax.mouse_init(rotate_btn = 1, zoom_btn = 3)
         self.ax.scatter(0,0,0,'ok')
-        self.ax.plot(xarray, yarray, zarray, '.',color='orange')
+        self.ax.scatter(xarray, yarray, zarray, marker='.',c=yarray,cmap='tab20b')
         self.ax.set_xlabel('X ')
         self.ax.set_ylabel('Y ')
         self.ax.set_zlabel('Z ')

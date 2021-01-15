@@ -133,8 +133,8 @@ def imprimir3D(array):
     ax.set_xlabel("x")
     ax.set_ylabel("y")
     ax.set_zlabel("z")
-    #ax.set_ylim(-1,150)
-    #ax.set_zlim(-20,30)
+    ax.set_ylim(-1,200)
+    ax.set_zlim(-10,100)
     #ax.set_xlim(-100,100)
 
     ax.grid(True)

@@ -37,7 +37,7 @@ class Scaner3D:
         self.process_scan = lambda scan: None   #Lectura de generadores
 
 
-    def Scanear(self, Angulo_Init=80,Angulo_Fin=120,paso=1, plotear=False):
+    def Scanear(self, Angulo_Init=80,Angulo_Fin=120,paso=1, revxplano=1, plotear=False):
         """
         Función para escanear los puntos en el espacio
         Parametros
@@ -67,7 +67,7 @@ class Scaner3D:
         self.phi=self.a*np.pi/180 #90 a 60        #Array de angulos
         
         #Inicializacion vector de datos
-        self.data = np.array([[0],[0],[0]])        
+        self.data = np.array([[],[],[]])        
         
         #Extraccion de puntos
         for j in range(len(self.phi)):
@@ -81,7 +81,7 @@ class Scaner3D:
                 self.process_scan(scan2)
                 i+=1
                 scan= scan2 + scan
-                if i>= 1:
+                if i>= revxplano:
                     break
             
 
@@ -153,7 +153,7 @@ class Scaner3D:
         ax.grid(True)
 
         #   Scaneo de los datos
-        ax.scatter(self.data[0,:], self.data[1,:], self.data[2,:], marker='.')
+        ax.scatter(self.data[0,:], self.data[1,:], self.data[2,:], marker='.', c=self.data[0,:], cmap="jet")
         plt.show()
        
     @staticmethod
