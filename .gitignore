@@ -1,0 +1,4 @@
+#Todos los sets
+*.txt
+#Todos los csvs
+*.csv
